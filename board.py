@@ -57,6 +57,35 @@ def choose_cell(player):
     board[row][col] = chars[player]
 
 
+def check_winner():
+    finished = False
+
+    for i in range(3):
+        # Check rows
+        if (board[i][0] == board[i][1] and board[i][1] == board[i][2] and board[i][2] != "-"):
+            finished = True
+
+        # Check columns
+        if (board[0][i] == board[1][i] and board[1][i] == board[2][i] and board[2][i] != "-"):
+            finished = True
+
+    # Check diagonals
+    if (board[0][0] == board[1][1] and board[1][1] == board[2][2]) or (board[0][2] == board[1][1] and board[1][1] ==  board[2][0]):
+        finished = board[1][1] != "-"
+    return finished
+
+def display_winner(winner):
+    print(winner, "won the game!")
+
+def check_draw():
+    isDraw = True
+
+    for i in range(3):
+        if "-" in board[i]:
+            isDraw = False
+
+    return isDraw
+
 
 while True:
     # Display the board
@@ -65,8 +94,20 @@ while True:
     # Let the player choose a cell
     choose_cell(current_player)
 
-    # Change the player
-    if current_player == "Player 1":
-        current_player = "Player 2"
+    # Check for winner
+    if check_winner():
+        print_board()
+        display_winner(current_player)
+        break
     else:
-        current_player = "Player 1"
+        # Check draw
+        if check_draw():
+            print_board()
+            print("No one won, it is a draw!")
+            break
+        else:
+            # Change the player
+            if current_player == "Player 1":
+                current_player = "Player 2"
+            else:
+                current_player = "Player 1"
